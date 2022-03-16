@@ -15,7 +15,7 @@ ROW_FORMAT: list[list[str, int]] = [
     ("SSS_SSS", 16),  # Next 16 rows
 ]
 
-SEATS = []
+SEATS: list[str] = []
 
 for row_type, amt in ROW_FORMAT:
     for i in range(amt):

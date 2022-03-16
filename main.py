@@ -1,5 +1,4 @@
 import pygame
-import plane_layout
 import plane
 from config import *
 from passengers import *
@@ -23,6 +22,6 @@ while sim_running:
             exit()
 
     WINDOW.fill((0, 0, 0))
-    plane_layout.draw_seats(WINDOW)
+    plane.draw_seats(WINDOW)
     plane.drawAndUpdatePassengers(WINDOW)
     pygame.display.update()
