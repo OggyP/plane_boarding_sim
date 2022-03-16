@@ -4,6 +4,9 @@
 #   _ | Walkable row
 #   # | Blocked off area
 
+from pygame import Vector2
+
+
 ROW_FORMAT: list[list[str, int]] = [
     ("EEE_###", 1),  # First row
     ("SSS_EEE", 1),  # Second row
@@ -26,7 +29,9 @@ SCALE = 0.3
 
 SEAT_DIMENSIONS = [100, 100]  # cm of each, [Width, Depth]
 
-MAX_MOVEMENT_SPEED = 120  # cm / s
+MAX_MOVEMENT_SPEED = 4200  # cm / s
+
+STARTING_POSITION = Vector2(0, 3)
 
 # Dimensions of the screen accounting for a margin of one seat
 WIDTH, HEIGHT = (ROW_COUNT + 2) * SEAT_DIMENSIONS[0] * SCALE, (len(
