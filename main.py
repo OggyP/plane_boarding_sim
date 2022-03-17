@@ -23,5 +23,6 @@ while sim_running:
 
     WINDOW.fill((0, 0, 0))
     plane.draw_seats(WINDOW)
-    plane.drawAndUpdatePassengers(WINDOW)
+    plane.draw_and_update_passengers(WINDOW)
+    plane.attempt_to_create_passenger()
     pygame.display.update()
