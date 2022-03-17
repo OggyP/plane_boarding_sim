@@ -40,18 +40,26 @@ class Passenger():
                         self.pos.x, self.ending_seat.y)
                     direction_to_seat_x = int(
                         difference_in_pos.x / abs(difference_in_pos.x))
-                    detected_people: list[passengers] = []
+
+                    detected_people: list[Vector2] = []
                     while (direction_to_seat_x > 0 and check_for_people_pos.x < self.ending_seat.x) or (direction_to_seat_x < 0 and check_for_people_pos.x > self.ending_seat.x):
                         if get_passengers(check_for_people_pos) is not None:
-                            detected_people.append([Vector2(check_for_people_pos.x, check_for_people_pos.y), Vector2(
-                                self.pos.x, self.pos.y + 2 + len(detected_people))])
+                            detected_people.append(Vector2(check_for_people_pos))
+                            # detected_people.append([Vector2(check_for_people_pos.x, check_for_people_pos.y), Vector2(
+                            #     self.pos.x, self.pos.y + 2 + len(detected_people))])
                         check_for_people_pos.x += direction_to_seat_x
 
                     if len(detected_people) > 0:
+                        detected_people_updates: list[passengers] = []
+                        detection_num = 0
+                        for detection in detected_people:
+                            detected_people_updates.append([Vector2(detection), Vector2(
+                                self.pos.x, self.pos.y + 1 + len(detected_people) - detection_num)])
+                            detection_num += 1
                         if self.waiting_for_seat_shuffle:
                             return None
                         self.waiting_for_seat_shuffle = True
-                        return detected_people
+                        return detected_people_updates
                 direction_to_seat = int(
                     difference_in_pos.y / abs(difference_in_pos.y))
                 new_pos = Vector2(self.pos)
