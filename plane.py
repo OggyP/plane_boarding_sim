@@ -32,7 +32,7 @@ def draw_and_update_passengers(WINDOW: pygame.Surface) -> None:
         pygame.draw.circle(WINDOW, passenger.colour,
                            person_circle_centre, min_seat_dimensions_scaled)
         person_update_info = passenger.update(passengers)
-        if person_update_info != None:
+        if person_update_info != None and person_update_info != 'Done':
             if isinstance(person_update_info, list):
                 for update_info in person_update_info:
                     get_passengers(update_info[0]).go_to = update_info[1]

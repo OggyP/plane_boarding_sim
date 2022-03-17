@@ -12,7 +12,7 @@ clock = pygame.time.Clock()
 
 sim_running = True
 
-wait = 30
+wait = 5
 
 plane.create_passenger(STARTING_POSITION, Vector2(4, 10))
 
@@ -28,10 +28,8 @@ while sim_running:
     WINDOW.fill((0, 0, 0))
     plane.draw_seats(WINDOW)
     plane.draw_and_update_passengers(WINDOW)
-    if wait == 20:
-        plane.create_passenger(STARTING_POSITION, Vector2(5, 10))
     if wait == 0:
-        plane.create_passenger(STARTING_POSITION, Vector2(6, 10))
-    # plane.attempt_to_create_passenger()
+        wait = 6
+        plane.attempt_to_create_passenger()
     pygame.display.update()
     wait -= 1

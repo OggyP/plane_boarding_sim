@@ -1,3 +1,4 @@
+from tabnanny import check
 from pygame.math import Vector2
 from config import MAX_MOVEMENT_SPEED, SEATS
 
@@ -45,8 +46,6 @@ class Passenger():
                     while (direction_to_seat_x > 0 and check_for_people_pos.x < self.ending_seat.x) or (direction_to_seat_x < 0 and check_for_people_pos.x > self.ending_seat.x):
                         if get_passengers(check_for_people_pos) is not None:
                             detected_people.append(Vector2(check_for_people_pos))
-                            # detected_people.append([Vector2(check_for_people_pos.x, check_for_people_pos.y), Vector2(
-                            #     self.pos.x, self.pos.y + 2 + len(detected_people))])
                         check_for_people_pos.x += direction_to_seat_x
 
                     if len(detected_people) > 0:
@@ -60,6 +59,13 @@ class Passenger():
                             return None
                         self.waiting_for_seat_shuffle = True
                         return detected_people_updates
+                for i in range(1, 3):
+                    check_pos = Vector2(self.pos)
+                    check_pos.y += i
+                    check_passenger = get_passengers(check_pos)
+                    if check_passenger is not None and not check_passenger.skip and check_passenger.ending_seat.y < check_passenger.pos.y:
+                        return None
+                    
                 direction_to_seat = int(
                     difference_in_pos.y / abs(difference_in_pos.y))
                 new_pos = Vector2(self.pos)
@@ -69,6 +75,10 @@ class Passenger():
                     return None
         else:
             # Get out of seat
+            check_for_passenger_pos = Vector2(self.go_to)
+            check_for_passenger_pos.y += 1
+            if get_passengers(check_for_passenger_pos):
+                return None
             if difference_in_pos.x == 0:
                 if difference_in_pos.y == 0:
                     self.at_seat = False

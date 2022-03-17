@@ -29,7 +29,7 @@ SCALE = 0.5
 
 SEAT_DIMENSIONS = [100, 100]  # cm of each, [Width, Depth]
 
-MAX_MOVEMENT_SPEED = 500  # cm / s
+MAX_MOVEMENT_SPEED = 700  # cm / s
 
 STARTING_POSITION = Vector2(3, -1)
 
