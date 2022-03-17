@@ -14,8 +14,6 @@ sim_running = True
 
 wait = 5
 
-plane.create_passenger(STARTING_POSITION, Vector2(4, 10))
-
 while sim_running:
     clock.tick(MAX_MOVEMENT_SPEED / SEAT_DIMENSIONS[0])
 

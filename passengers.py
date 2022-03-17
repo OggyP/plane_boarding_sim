@@ -1,6 +1,6 @@
-from tabnanny import check
 from pygame.math import Vector2
-from config import MAX_MOVEMENT_SPEED, SEATS
+import pygame
+from config import *
 
 
 class Passenger():
@@ -10,9 +10,28 @@ class Passenger():
         self.waiting_for_seat_shuffle = False
         self.at_seat = False
         self.go_to: Vector2 | None = None
-        self.colour = (63 + round(192 * endingPos.x / (len(SEATS[0]) - 1)), 63 + round(192 * endingPos.y / (len(SEATS) - 1)), 63 + round(192 * endingPos.y / (len(SEATS) - 1)))
-        self.pos: Vector2  = Vector2(current_position)
+        self.colour = (63 + round(192 * endingPos.x / (len(SEATS[0]) - 1)), 63 + round(
+            192 * endingPos.y / (len(SEATS) - 1)), 63 + round(192 * endingPos.y / (len(SEATS) - 1)))
+        self.pos: Vector2 = Vector2(current_position)
         self.skip = False
+
+    def render(self, WINDOW: pygame.surface.Surface):
+        person_circle_centre = Vector2(
+            SEAT_DIMENSIONS[1] * SCALE + MIN_SEAT_DIM_SCALED +
+            self.pos.y * SEAT_DIMENSIONS[1] * SCALE,
+            HEIGHT - ((self.pos.x + 2)
+                      * SEAT_DIMENSIONS[0] * SCALE - MIN_SEAT_DIM_SCALED),
+        )
+        pygame.draw.circle(WINDOW, self.colour,
+                           person_circle_centre, MIN_SEAT_DIM_SCALED)
+
+        person_line_end = Vector2(
+            SEAT_DIMENSIONS[1] * SCALE + MIN_SEAT_DIM_SCALED +
+            self.ending_seat.y * SEAT_DIMENSIONS[1] * SCALE,
+            HEIGHT - ((self.ending_seat.x + 2)
+                      * SEAT_DIMENSIONS[0] * SCALE - MIN_SEAT_DIM_SCALED),
+        )
+        pygame.draw.line(WINDOW, self.colour, person_circle_centre, person_line_end, 2)
 
     def update(self, passengers: list[list[any]]):
         if self.skip:
@@ -45,7 +64,8 @@ class Passenger():
                     detected_people: list[Vector2] = []
                     while (direction_to_seat_x > 0 and check_for_people_pos.x < self.ending_seat.x) or (direction_to_seat_x < 0 and check_for_people_pos.x > self.ending_seat.x):
                         if get_passengers(check_for_people_pos) is not None:
-                            detected_people.append(Vector2(check_for_people_pos))
+                            detected_people.append(
+                                Vector2(check_for_people_pos))
                         check_for_people_pos.x += direction_to_seat_x
 
                     if len(detected_people) > 0:
@@ -59,13 +79,16 @@ class Passenger():
                             return None
                         self.waiting_for_seat_shuffle = True
                         return detected_people_updates
-                for i in range(1, 3):
+                for i in range(1, 4):
                     check_pos = Vector2(self.pos)
                     check_pos.y += i
                     check_passenger = get_passengers(check_pos)
                     if check_passenger is not None and not check_passenger.skip and check_passenger.ending_seat.y < check_passenger.pos.y:
-                        return None
-                    
+                        if check_passenger.ending_seat.y == self.ending_seat.y:
+                            continue
+                        else:
+                            return None
+
                 direction_to_seat = int(
                     difference_in_pos.y / abs(difference_in_pos.y))
                 new_pos = Vector2(self.pos)
@@ -74,11 +97,6 @@ class Passenger():
                     self.pos = new_pos
                     return None
         else:
-            # Get out of seat
-            check_for_passenger_pos = Vector2(self.go_to)
-            check_for_passenger_pos.y += 1
-            if get_passengers(check_for_passenger_pos):
-                return None
             if difference_in_pos.x == 0:
                 if difference_in_pos.y == 0:
                     self.at_seat = False

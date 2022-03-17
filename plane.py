@@ -19,18 +19,9 @@ for row in SEATS:
 
 def draw_and_update_passengers(WINDOW: pygame.Surface) -> None:
     global passengers
-    min_seat_dimensions_scaled = min(
-        SEAT_DIMENSIONS[0], SEAT_DIMENSIONS[1]) * SCALE * 0.5
 
     for passenger in passengers:
-        person_circle_centre = Vector2(
-            SEAT_DIMENSIONS[1] * SCALE + min_seat_dimensions_scaled +
-            passenger.pos.y * SEAT_DIMENSIONS[1] * SCALE,
-            HEIGHT - ((passenger.pos.x + 2)
-                      * SEAT_DIMENSIONS[0] * SCALE - min_seat_dimensions_scaled),
-        )
-        pygame.draw.circle(WINDOW, passenger.colour,
-                           person_circle_centre, min_seat_dimensions_scaled)
+        passenger.render(WINDOW)
         person_update_info = passenger.update(passengers)
         if person_update_info != None and person_update_info != 'Done':
             if isinstance(person_update_info, list):

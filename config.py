@@ -8,11 +8,13 @@ from pygame import Vector2
 
 
 ROW_FORMAT: list[list[str, int]] = [
+    ("###_###", 1),  # NON SEATS
     ("EEE_###", 1),  # First row
     ("SSS_EEE", 1),  # Second row
     ("SSS_SSS", 13),  # Next 13 rows
     ("EEE_EEE", 1),  # Escape row
     ("SSS_SSS", 16),  # Next 16 rows
+    ("###_###", 1),  # NON SEATS
 ]
 
 SEATS: list[str] = []
@@ -29,10 +31,13 @@ SCALE = 0.5
 
 SEAT_DIMENSIONS = [100, 100]  # cm of each, [Width, Depth]
 
-MAX_MOVEMENT_SPEED = 700  # cm / s
+MAX_MOVEMENT_SPEED = 5000  # cm / s
 
 STARTING_POSITION = Vector2(3, -1)
 
 # Dimensions of the screen accounting for a margin of one seat
 WIDTH, HEIGHT = (ROW_COUNT + 2) * SEAT_DIMENSIONS[0] * SCALE, (len(
     ROW_FORMAT[0][0]) + 2) * SEAT_DIMENSIONS[1] * SCALE
+
+MIN_SEAT_DIM_SCALED = min(
+    SEAT_DIMENSIONS[0], SEAT_DIMENSIONS[1]) * SCALE * 0.5
