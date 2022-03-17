@@ -3,9 +3,7 @@ from random import randint, choice
 from pygame import Vector2
 from config import *
 import pygame
-from passengers import Passenger
-
-passengers: list[Passenger] = []
+from passengers import *
 
 seat_choices: list[Vector2] = []
 
@@ -19,32 +17,20 @@ for row in SEATS:
     position.y += 1
 
 
-def get_passengers(position: Vector2):
-    for passenger in passengers:
-        if int(passenger.position.x) == int(position.x) and int(passenger.position.y) == int(position.y):
-            return passenger
-
-    return None
-
-
 def draw_and_update_passengers(WINDOW: pygame.Surface) -> None:
     global passengers
     min_seat_dimensions_scaled = min(
         SEAT_DIMENSIONS[0], SEAT_DIMENSIONS[1]) * SCALE * 0.5
-    new_passenger_positions = [row[:] for row in passengers]
 
     for passenger in passengers:
         person_circle_centre = Vector2(
             SEAT_DIMENSIONS[1] * SCALE + min_seat_dimensions_scaled +
-            passenger.position.y * SEAT_DIMENSIONS[1] * SCALE,
-            HEIGHT - ((passenger.position.x + 2)
+            passenger.pos.y * SEAT_DIMENSIONS[1] * SCALE,
+            HEIGHT - ((passenger.pos.x + 2)
                       * SEAT_DIMENSIONS[0] * SCALE - min_seat_dimensions_scaled),
         )
-        pygame.draw.circle(WINDOW, (0, 255, 0),
+        pygame.draw.circle(WINDOW, passenger.colour,
                            person_circle_centre, min_seat_dimensions_scaled)
-        if passenger.skip:
-            passenger.skip = False
-            continue
         person_update_info = passenger.update(passengers)
         if person_update_info != None:
             if isinstance(person_update_info, list):
@@ -56,26 +42,20 @@ def draw_and_update_passengers(WINDOW: pygame.Surface) -> None:
                 # new_passenger_positions[int(STARTING_POSITION.x)][int(STARTING_POSITION.y)] = Passenger(
                 #     Vector2(randint(0, len(SEATS[0]) - 1), randint(0, ROW_COUNT - 1)))
             elif person_update_info == 'Moved':
-                passengers.append(passengers.pop(
+                passengers.insert(0, passengers.pop(
                     passengers.index(passenger)))
-                passenger.skip = True
-            else:
-                new_passenger_positions[int(person_update_info.y)][int(
-                    person_update_info.x)] = passengers[current_row_number][person_within_row_number]
-                new_passenger_positions[current_row_number][person_within_row_number] = None
-    for update_info in cv:
-        new_passenger_positions[int(update_info[0].y)][int(
-            update_info[0].x)].go_to = update_info[1]
-    passengers = new_passenger_positions
 
 
 def attempt_to_create_passenger():
-    if passengers[int(STARTING_POSITION.x)][int(STARTING_POSITION.y)] == None:
+    if get_passengers(STARTING_POSITION) == None:
+        if not len(seat_choices):
+            return
         ending_pos = choice(seat_choices)
         seat_choices.remove(ending_pos)
-        passengers[int(STARTING_POSITION.x)][int(
-            STARTING_POSITION.y)] = Passenger(choice(seat_choices))
+        create_passenger(STARTING_POSITION, ending_pos)
 
+def create_passenger(position: Vector2, ending_position: Vector2):
+    passengers.append(Passenger(position, ending_position))
 
 def draw_seats(WINDOW: pygame.Surface):
     current_row_number = 0  # 0 is row 1, 1 is row 2 etc
@@ -99,6 +79,3 @@ def draw_seats(WINDOW: pygame.Surface):
                     pygame.draw.rect(WINDOW, (255, 255, 255), seat_rect)
             seat_within_row_number += 1
         current_row_number += 1
-
-
-attempt_to_create_passenger()

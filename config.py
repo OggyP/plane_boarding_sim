@@ -25,13 +25,13 @@ ROW_COUNT = 0
 for row in ROW_FORMAT:
     ROW_COUNT += row[1]
 
-SCALE = 0.3
+SCALE = 0.5
 
 SEAT_DIMENSIONS = [100, 100]  # cm of each, [Width, Depth]
 
 MAX_MOVEMENT_SPEED = 500  # cm / s
 
-STARTING_POSITION = Vector2(0, 3)
+STARTING_POSITION = Vector2(3, -1)
 
 # Dimensions of the screen accounting for a margin of one seat
 WIDTH, HEIGHT = (ROW_COUNT + 2) * SEAT_DIMENSIONS[0] * SCALE, (len(
