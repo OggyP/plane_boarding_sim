@@ -1,4 +1,3 @@
-from audioop import reverse
 from random import randint, choice
 from pygame import Vector2
 from config import *

@@ -17,7 +17,7 @@ key_pressed = True
 tick = 0
 
 while sim_running:
-    clock.tick(MAX_MOVEMENT_SPEED / SEAT_DIMENSIONS[0])
+    # clock.tick(MAX_MOVEMENT_SPEED / SEAT_DIMENSIONS[0])
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

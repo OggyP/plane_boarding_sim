@@ -17,6 +17,15 @@ ROW_FORMAT: list[list[str, int]] = [
     ("###_###", 1),  # NON SEATS
 ]
 
+AISLE_SEATS = []
+
+for idx, val in enumerate(ROW_FORMAT[0][0]):
+    if val == '_':
+        AISLE_SEATS.append(idx)
+
+print(AISLE_SEATS)
+
+
 SEATS: list[str] = []
 
 for row_type, amt in ROW_FORMAT:
@@ -31,9 +40,11 @@ SCALE = 0.5
 
 SEAT_DIMENSIONS = [100, 100]  # cm of each, [Width, Depth]
 
-MAX_MOVEMENT_SPEED = 5000  # cm / s
+MAX_MOVEMENT_SPEED = 100000  # cm / s
 
 STARTING_POSITION = Vector2(3, -1)
+
+BAGGAGE_WAITING_TIME = 20
 
 # Dimensions of the screen accounting for a margin of one seat
 WIDTH, HEIGHT = (ROW_COUNT + 2) * SEAT_DIMENSIONS[0] * SCALE, (len(
@@ -41,3 +52,5 @@ WIDTH, HEIGHT = (ROW_COUNT + 2) * SEAT_DIMENSIONS[0] * SCALE, (len(
 
 MIN_SEAT_DIM_SCALED = min(
     SEAT_DIMENSIONS[0], SEAT_DIMENSIONS[1]) * SCALE * 0.5
+
+hold_ups = 0

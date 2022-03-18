@@ -1,13 +1,16 @@
 from pygame.math import Vector2
 import pygame
 from config import *
+import random
 
+seat_shuffles = 0
 
 class Passenger():
     def __init__(self, current_position: Vector2, endingPos: Vector2) -> None:
-        print(current_position)
         self.ending_seat: Vector2 = Vector2(endingPos)
         self.waiting_for_seat_shuffle = False
+        self.baggage_wait = BAGGAGE_WAITING_TIME if random.random() < 0.47 else 0
+        # self.baggage_wait = BAGGAGE_WAITING_TIME
         self.at_seat = False
         self.go_to: Vector2 | None = None
         self.colour = (63 + round(192 * endingPos.x / (len(SEATS[0]) - 1)), 63 + round(
@@ -35,6 +38,7 @@ class Passenger():
                          person_circle_centre, person_line_end, 2)
 
     def update(self, passengers: list[list[any]]):
+        global seat_shuffles
         if self.skip:
             self.skip = False
             return "Moved"
@@ -48,6 +52,10 @@ class Passenger():
                 if difference_in_pos.x == 0:
                     self.at_seat = True
                     return "Done"
+                if self.pos.x in AISLE_SEATS:
+                    if self.baggage_wait > 0:
+                        self.baggage_wait -= 1
+                        return None
                 direction_to_seat = int(
                     difference_in_pos.x / abs(difference_in_pos.x))
                 new_pos = Vector2(self.pos)
@@ -82,6 +90,8 @@ class Passenger():
                         if self.waiting_for_seat_shuffle:
                             return None
                         self.waiting_for_seat_shuffle = True
+                        seat_shuffles += 1
+                        print(seat_shuffles)
                         return detected_people_updates
                 if not self.ending_seat.y < self.pos.y:
                     for i in range(4):
