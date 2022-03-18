@@ -44,7 +44,7 @@ MAX_MOVEMENT_SPEED = 100000  # cm / s
 
 STARTING_POSITION = Vector2(3, -1)
 
-BAGGAGE_WAITING_TIME = 20
+BAGGAGE_WAITING_TIME = 12
 
 # Dimensions of the screen accounting for a margin of one seat
 WIDTH, HEIGHT = (ROW_COUNT + 2) * SEAT_DIMENSIONS[0] * SCALE, (len(
