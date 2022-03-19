@@ -1,4 +1,3 @@
-from tabnanny import check
 from pygame.math import Vector2
 import pygame
 from config import *
@@ -40,7 +39,7 @@ class Passenger():
                         detected_people.append(
                             Vector2(check_for_people_pos))
                     check_for_people_pos.x += direction_to_seat_x
-                
+
                 if len(detected_people) > 0:
                     return (0, 255, 0)
         if self.go_to:
@@ -119,7 +118,7 @@ class Passenger():
                             detection_num += 1
                         if self.waiting_for_seat_shuffle:
                             return None
-                            
+
                         new_pos = Vector2(self.pos)
                         new_pos.y += 1
 

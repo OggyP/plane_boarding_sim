@@ -29,6 +29,7 @@ for i in range(SECTIONS):
         already_done += 1
     boarding_by_section.append(section)
 
+
 def draw_and_update_passengers(WINDOW: pygame.Surface) -> None:
     global passengers
 
@@ -62,8 +63,10 @@ def attempt_to_create_passenger():
         boarding_by_section[boarding_section].remove(ending_pos)
         create_passenger(STARTING_POSITION, ending_pos)
 
+
 def create_passenger(position: Vector2, ending_position: Vector2):
     passengers.append(Passenger(position, ending_position))
+
 
 def draw_seats(WINDOW: pygame.Surface):
     current_row_number = 0  # 0 is row 1, 1 is row 2 etc
