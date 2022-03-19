@@ -1,38 +1,26 @@
-import pygame
-import plane
-from config import *
-from passengers import *
+from planeSimHeadless import Plane_Simulation as HeadlessSim
+from planeSim import Plane_Simulation as VisualSim
+# import asyncio
 
-WINDOW = pygame.display.set_mode((int(WIDTH), int(HEIGHT)))
+# ticks_taken = []
 
-pygame.display.init()
-pygame.display.set_caption("Plane Boarding / Exiting Simulation")
+# async def run_function():
+#     sim = HeadlessSim()
+#     while sim.running:
+#         sim.tick()
+#     ticks_taken.append(sim.current_tick)
 
-clock = pygame.time.Clock()
+# async def main():
+#     simulations = []
+#     for i in range(100):
+#         simulations.append(asyncio.create_task(run_function()))
 
-sim_running = True
+#     for sim in simulations:
+#         try:
+#             await sim
+#         except asyncio.CancelledError:
+#             pass
 
-key_pressed = True
+# asyncio.run(main())
 
-tick = 0
-
-while sim_running:
-    # clock.tick(MAX_MOVEMENT_SPEED / SEAT_DIMENSIONS[0])
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sim_running = True
-            pygame.quit()
-            exit()
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            key_pressed = True
-
-    # if key_pressed:
-    WINDOW.fill((0, 0, 0))
-    plane.draw_seats(WINDOW)
-    plane.draw_and_update_passengers(WINDOW)
-    plane.attempt_to_create_passenger()
-    pygame.display.update()
-    # pygame.image.save(WINDOW, "./frames/frame_" + str(tick) + ".jpeg")
-    tick += 1
-    key_pressed = False
+sim = VisualSim(5)

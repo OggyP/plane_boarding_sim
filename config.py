@@ -7,52 +7,53 @@
 from pygame import Vector2
 
 
-ROW_FORMAT: list[list[str, int]] = [
-    ("###_###", 1),  # NON SEATS
-    ("EEE_###", 1),  # First row
-    ("SSS_EEE", 1),  # Second row
-    ("SSS_SSS", 13),  # Next 13 rows
-    ("EEE_EEE", 1),  # Escape row
-    ("SSS_SSS", 16),  # Next 16 rows
-    ("###_###", 1),  # NON SEATS
-]
+class Sim_Config:
+    def __init__(self) -> None:
+        self.ROW_FORMAT: list[list[str, int]] = [
+            ("###_###", 1),  # NON SEATS
+            ("EEE_###", 1),  # First row
+            ("SSS_EEE", 1),  # Second row
+            ("SSS_SSS", 13),  # Next 13 rows
+            ("EEE_EEE", 1),  # Escape row
+            ("SSS_SSS", 16),  # Next 16 rows
+            ("###_###", 1),  # NON SEATS
+        ]
 
-AISLE_SEATS = []
+        self.AISLE_SEATS = []
 
-for idx, val in enumerate(ROW_FORMAT[0][0]):
-    if val == '_':
-        AISLE_SEATS.append(idx)
+        for idx, val in enumerate(self.ROW_FORMAT[0][0]):
+            if val == '_':
+                self.AISLE_SEATS.append(idx)
 
-print(AISLE_SEATS)
+        self.AISLE_SEATS
 
+        self.SEATS: list[str] = []
 
-SEATS: list[str] = []
+        for row_type, amt in self.ROW_FORMAT:
+            for i in range(amt):
+                self.SEATS.append(row_type)
 
-for row_type, amt in ROW_FORMAT:
-    for i in range(amt):
-        SEATS.append(row_type)
+        self.ROW_COUNT = 0
+        for row in self.ROW_FORMAT:
+            self.ROW_COUNT += row[1]
 
-ROW_COUNT = 0
-for row in ROW_FORMAT:
-    ROW_COUNT += row[1]
+        self.SCALE = 0.5
 
-SCALE = 0.5
+        self.SEAT_DIMENSIONS = [100, 100]  # cm of each, [Width, Depth]
 
-SEAT_DIMENSIONS = [100, 100]  # cm of each, [Width, Depth]
+        self.MAX_MOVEMENT_SPEED = 100000  # cm / s
 
-MAX_MOVEMENT_SPEED = 100000  # cm / s
+        self.STARTING_POSITION = Vector2(3, -1)
 
-STARTING_POSITION = Vector2(3, -1)
+        self.BAGGAGE_WAITING_TIME = 12
 
-BAGGAGE_WAITING_TIME = 12
+        # Dimensions of the screen accounting for a margin of one seat
+        self.WIDTH, self.HEIGHT = (self.ROW_COUNT + 2) * self.SEAT_DIMENSIONS[0] * self.SCALE, (len(
+            self.ROW_FORMAT[0][0]) + 2) * self.SEAT_DIMENSIONS[1] * self.SCALE
 
-# Dimensions of the screen accounting for a margin of one seat
-WIDTH, HEIGHT = (ROW_COUNT + 2) * SEAT_DIMENSIONS[0] * SCALE, (len(
-    ROW_FORMAT[0][0]) + 2) * SEAT_DIMENSIONS[1] * SCALE
+        self.MIN_SEAT_DIM_SCALED = min(
+            self.SEAT_DIMENSIONS[0], self.SEAT_DIMENSIONS[1]) * self.SCALE * 0.5
 
-MIN_SEAT_DIM_SCALED = min(
-    SEAT_DIMENSIONS[0], SEAT_DIMENSIONS[1]) * SCALE * 0.5
+        self.SECTIONS = 3
 
-SECTIONS = 3
-
-hold_ups = 0
+        self.hold_ups = 0
