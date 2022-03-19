@@ -4,16 +4,17 @@ from planeSim import Plane_Simulation as VisualSim
 
 # ticks_taken = []
 
-# async def run_function():
+# async def run_function(i):
 #     sim = HeadlessSim()
 #     while sim.running:
 #         sim.tick()
 #     ticks_taken.append(sim.current_tick)
+#     print("Done Simulation " + str(i))
 
 # async def main():
 #     simulations = []
-#     for i in range(100):
-#         simulations.append(asyncio.create_task(run_function()))
+#     for i in  range(100):
+#         simulations.append(asyncio.create_task(run_function(i)))
 
 #     for sim in simulations:
 #         try:
@@ -21,6 +22,8 @@ from planeSim import Plane_Simulation as VisualSim
 #         except asyncio.CancelledError:
 #             pass
 
+#     print(ticks_taken)
+
 # asyncio.run(main())
 
-sim = VisualSim(5)
+sim = VisualSim(15)

@@ -16,7 +16,6 @@ class Plane_Simulation:
         self.plane.attempt_to_create_passenger()
         if self.plane.fully_boarded():
             self.running = False
-            print(self.plane.seat_shuffles)
         self.current_tick += 1
 
 
