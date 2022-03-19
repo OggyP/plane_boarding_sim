@@ -3,7 +3,7 @@ import plane
 from config import *
 from passengers import *
 
-WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
+WINDOW = pygame.display.set_mode((int(WIDTH), int(HEIGHT)))
 
 pygame.display.init()
 pygame.display.set_caption("Plane Boarding / Exiting Simulation")

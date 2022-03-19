@@ -1,4 +1,4 @@
-from random import randint, choice
+from random import choice
 from pygame import Vector2
 from config import *
 import pygame
@@ -15,6 +15,19 @@ for row in SEATS:
     position.x = 0
     position.y += 1
 
+boarding_section = 0
+boarding_by_section = []
+
+section_avg_size = len(seat_choices) / SECTIONS
+
+already_done = 0
+for i in range(SECTIONS):
+    section = []
+    num = round((1 + i) * section_avg_size) - already_done
+    for j in range(num):
+        section.append(seat_choices.pop())
+        already_done += 1
+    boarding_by_section.append(section)
 
 def draw_and_update_passengers(WINDOW: pygame.Surface) -> None:
     global passengers
@@ -37,11 +50,16 @@ def draw_and_update_passengers(WINDOW: pygame.Surface) -> None:
 
 
 def attempt_to_create_passenger():
+    global boarding_section
     if get_passengers(STARTING_POSITION) == None:
-        if not len(seat_choices):
+        if boarding_section >= SECTIONS:
             return
-        ending_pos = choice(seat_choices)
-        seat_choices.remove(ending_pos)
+        if not len(boarding_by_section[boarding_section]):
+            boarding_section += 1
+        if boarding_section >= SECTIONS:
+            return
+        ending_pos = choice(boarding_by_section[boarding_section])
+        boarding_by_section[boarding_section].remove(ending_pos)
         create_passenger(STARTING_POSITION, ending_pos)
 
 def create_passenger(position: Vector2, ending_position: Vector2):
