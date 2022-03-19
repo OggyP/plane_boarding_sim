@@ -19,6 +19,20 @@ class Plane:
             position.x = 0
             position.y += 1
 
+        self.boarding_section = 0
+        self.boarding_by_section = []
+
+        section_avg_size = len(self.seat_choices) / self.config.SECTIONS
+
+        already_done = 0
+        for i in range(self.config.SECTIONS):
+            section = []
+            num = round((1 + i) * section_avg_size) - already_done
+            for j in range(num):
+                section.append(self.seat_choices.pop())
+                already_done += 1
+            self.boarding_by_section.append(section)
+
     def draw_and_update_passengers(self, WINDOW: pygame.Surface or None) -> None:
         for passenger in self.passengers:
             if WINDOW is not None:
@@ -37,10 +51,14 @@ class Plane:
 
     def attempt_to_create_passenger(self):
         if self.get_passengers(self.config.STARTING_POSITION) == None:
-            if not len(self.seat_choices):
+            if self.boarding_section >= self.config.SECTIONS:
                 return
-            ending_pos = choice(self.seat_choices)
-            self.seat_choices.remove(ending_pos)
+            if not len(self.boarding_by_section[self.boarding_section]):
+                self.boarding_section += 1
+            if self.boarding_section >= self.config.SECTIONS:
+                return
+            ending_pos = choice(self.boarding_by_section[self.boarding_section])
+            self.boarding_by_section[self.boarding_section].remove(ending_pos)
             self.create_passenger(self.config.STARTING_POSITION, ending_pos)
 
     def create_passenger(self, position: Vector2, ending_position: Vector2):
