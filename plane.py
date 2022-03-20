@@ -11,10 +11,18 @@ class Plane:
         position: Vector2 = Vector2(0, 0)
         self.passengers: list[Passenger] = []
         self.seat_shuffles = 0
+
+        self.boarding_section = 0
+        self.boarding_by_section = []
+
+        for i in range(self.config.SECTIONS):
+            self.boarding_by_section.append([])
+
         for row in self.config.SEATS:
             for area in row:
                 if area == 'E' or area == 'S':
-                    self.seat_choices.append(Vector2(position.x, position.y))
+                    boarding_group: int = 3 - int(abs(position.x - self.config.AISLE_SEATS[0]))
+                    self.boarding_by_section[boarding_group].append(Vector2(position.x, position.y))
                 position.x += 1
             position.x = 0
             position.y += 1
@@ -37,10 +45,15 @@ class Plane:
 
     def attempt_to_create_passenger(self):
         if self.get_passengers(self.config.STARTING_POSITION) == None:
-            if not len(self.seat_choices):
+            if self.boarding_section >= self.config.SECTIONS:
                 return
-            ending_pos = choice(self.seat_choices)
-            self.seat_choices.remove(ending_pos)
+            if not len(self.boarding_by_section[self.boarding_section]):
+                self.boarding_section += 1
+            if self.boarding_section >= self.config.SECTIONS:
+                return
+            ending_pos = choice(
+                self.boarding_by_section[self.boarding_section])
+            self.boarding_by_section[self.boarding_section].remove(ending_pos)
             self.create_passenger(self.config.STARTING_POSITION, ending_pos)
 
     def create_passenger(self, position: Vector2, ending_position: Vector2):
@@ -76,7 +89,7 @@ class Plane:
                         pygame.draw.rect(WINDOW, (255, 255, 255), seat_rect)
                 seat_within_row_number += 1
             current_row_number += 1
-        
+
     def fully_boarded(self) -> bool:
         for passenger in self.passengers:
             if passenger.pos.x in self.config.AISLE_SEATS:
