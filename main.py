@@ -1,5 +1,6 @@
 from planeSimHeadless import Plane_Simulation as HeadlessSim
 from planeSim import Plane_Simulation as VisualSim
+# Uncomment the below to run 100 simultaniously:
 # import asyncio
 
 # ticks_taken = []
@@ -26,4 +27,6 @@ from planeSim import Plane_Simulation as VisualSim
 
 # asyncio.run(main())
 
+
+# Visual Simulation
 sim = VisualSim(15)
