@@ -1,3 +1,3 @@
 # Plane Boarding Simuation
 
-This simulation was created for the 2022 [IMMC](https://www.immchallenge.org.au/).
+This simulation was created for the Australian 2022 [International Mathematical Modeling Challenge (IMMC)](https://www.immchallenge.org.au/).
